@@ -4,9 +4,10 @@ const createError = require("http-errors");
 
 require("dotenv").config();
 // require("./Helpers/connect.mongodb")
+require("./Helpers/connect.redis")
 
 const userRouter = require("./routers/user.router");
-const PORT = process.env.PORT || 3001;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res, next) => {
@@ -27,6 +28,8 @@ app.use((err, req, res, next) => {
     message: err.message,
   });
 });
+
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
   console.log(`Server running on port: ${PORT}`);
