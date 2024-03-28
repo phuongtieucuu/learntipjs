@@ -1,0 +1,9 @@
+
+###
+POST http://localhost:3000/order
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "orderId": "order123"
+}

@@ -1,0 +1,55 @@
+const express = require("express")
+const app = express()
+const {
+    get,
+    set,
+    incrby,
+    exists,
+    setnx,
+    decrby
+} = require("./model.redis");
+
+app.get('/order', async (req, res, next) => {
+    // so luong ton kho
+    const sl = 10;
+    // ten san pham
+    const productName = 'Iphone13'
+    // so luong mua
+    const slMua = 1;
+
+    // so luong da ban ra, neu chua thi = 0, moi lan ban update tang 1
+    const product = await exists(productName)
+
+    if (!product) {
+        // await set(productName, 0)
+        // neu co dong thoi 2 hay nhieu request mua hang cung 1 luc thi su dung setnx
+        // setnx se khong dc dat lai
+        const nx = await setnx(productName, "0")
+        console.log("ns ===", nx);
+
+    }
+
+    //lay so luong ban ra
+
+    let slBanRa = await get(productName);
+    console.log("Truoc khi user order ===", slBanRa);
+    slBanRa = await incrby(productName, slMua)
+
+    if (+slBanRa > sl) {
+        console.log("HET HANG");
+        return res.json({
+            message: "HET HANG"
+        })
+    }
+    // neu order thanh cong
+    // slBanRa = await incrby(productName, slMua)
+    console.log("Sau khi user order ===", slBanRa);
+    if (slBanRa > sl) {
+        await set("banquaroi", slBanRa - sl)
+    }
+    res.json({ message: "Ok" })
+})
+
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+})
