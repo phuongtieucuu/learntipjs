@@ -37,3 +37,23 @@ Content-Type: application/json
 {
     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWZiOWU1ZmE4Yjc1YTRlZjA2ZmVmY2QiLCJpYXQiOjE3MTEwMTA4NTgsImV4cCI6MTcxMTYxNTY1OH0.BPPWq69TAXSIurmRa2jISrLyGWJylJDB3qoyO55sOh8"
 }
+
+###
+POST http://localhost:3000/v1/api/user
+Content-Type: application/json
+
+{
+    "userId": 2,
+    "amount": 10
+}
+
+
+###
+POST http://localhost:3000/v1/api/transfer
+Content-Type: application/json
+
+{
+    "fromId": 1,
+    "toId": 2,
+    "amount": 10
+}
