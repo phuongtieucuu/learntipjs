@@ -43,7 +43,7 @@ POST http://localhost:3000/v1/api/user
 Content-Type: application/json
 
 {
-    "userId": 2,
+    "userId": 3,
     "amount": 10
 }
 
@@ -55,5 +55,5 @@ Content-Type: application/json
 {
     "fromId": 1,
     "toId": 2,
-    "amount": 10
+    "amount": 30
 }
