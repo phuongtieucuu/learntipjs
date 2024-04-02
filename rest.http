@@ -57,3 +57,19 @@ Content-Type: application/json
     "toId": 2,
     "amount": 30
 }
+
+###
+POST http://localhost:3000/create-comment
+Content-Type: application/json
+
+{
+    "blogId": 1,
+    "commentId": 5,
+    "name": "Comment 5",
+    "body": "Body",
+    "email": "Email"
+}
+
+###
+GET http://localhost:3000/search-comment?blogId=1&page=2
+Content-Type: application/json

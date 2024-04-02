@@ -6,9 +6,6 @@ require("dotenv").config();
 // require("./Helpers/connect.mongodb")
 require("./Helpers/connect.redis")
 
-const userRouter = require("./routers/user.router");
-const moneyRouter = require("./routers/money.router");
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res, next) => {
@@ -18,8 +15,7 @@ app.get("/", (req, res, next) => {
   });
 });
 
-app.use("/user", userRouter);
-app.use(moneyRouter);
+app.use(require("./routers"));
 
 
 app.use((req, res, next) => {
