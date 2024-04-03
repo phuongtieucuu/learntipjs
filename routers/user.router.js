@@ -4,6 +4,7 @@ const createHttpError = require("http-errors");
 const { userValidate } = require("../Helpers/validation");
 const { signAccessToken, verifyAccessToken, signRefreshToken, verifyRefreshToken } = require("../Helpers/jwt.service");
 const client = require("../Helpers/connect.redis");
+const { resgister, login, logout, registerOtp, verifyOtp } = require("../services/user.service");
 const router = express.Router();
 
 router.post("/resgister", async (req, res, next) => {
@@ -13,15 +14,9 @@ router.post("/resgister", async (req, res, next) => {
 
         if (error) throw createHttpError.BadRequest(error.details[0].message)
 
-        const userExit = await userModal.findOne({ email })
-
-        if (userExit) throw createHttpError.Conflict()
-        const user = new userModal({ email, password })
-        const newUser = await user.save();
-
         return res.json({
             status: "CREATED",
-            data: newUser
+            data: await resgister({ email, password })
         })
     } catch (err) {
         next(err)
@@ -33,15 +28,8 @@ router.post("/login", async (req, res, next) => {
         const { error } = userValidate(req.body)
         if (error) throw createHttpError.BadRequest(error.details[0].message)
         const { email, password } = req.body;
+        const { accessToken, refreshToken } = await login({ email, password })
 
-        const userExit = await userModal.findOne({ email })
-        if (!userExit) throw createHttpError.NotFound("User not register!!")
-
-        const isValid = await userExit.checkPassword(password)
-        if (!isValid) throw createHttpError.Unauthorized()
-
-        const accessToken = await signAccessToken(userExit._id)
-        const refreshToken = await signRefreshToken(userExit._id)
         return res.status(200).json({
             status: "OK",
             accessToken,
@@ -56,9 +44,8 @@ router.post("/refresh-token", async (req, res, next) => {
     try {
         const { refreshToken } = req.body
         if (!refreshToken) throw createHttpError.BadRequest()
-        const { userId } = await verifyRefreshToken(refreshToken)
-        const accessToken = await signAccessToken(userId)
-        const refToken = await signRefreshToken(userId)
+        const { accessToken, refToken } = await refreshToken(refreshToken)
+
         return res.status(200).json({
             status: "OK",
             accessToken,
@@ -73,8 +60,8 @@ router.post("/logout", async (req, res, next) => {
     try {
         const { refreshToken } = req.body
         if (!refreshToken) throw createHttpError.BadRequest()
-        const { userId } = await verifyRefreshToken(refreshToken)
-        await client.del(userId.toString())
+        await logout(refreshToken)
+
         return res.status(200).json({
             status: "OK",
             message: "Logout!!"
@@ -85,8 +72,33 @@ router.post("/logout", async (req, res, next) => {
 })
 
 router.get("/list", verifyAccessToken, (req, res, next) => {
-    console.log(req.headers);
     res.send("OKE")
+})
+
+router.post("/register-otp", async (req, res, next) => {
+    try {
+        const { email } = req.body
+        const { otp } = await registerOtp(email)
+
+        return res.status(200).json({
+            status: "OKE",
+            data: otp
+        })
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.post("/verify-otp", async (req, res, next) => {
+    try {
+        const { email, password, otp } = req.body;
+        return res.status(200).json({
+            status: "OKE",
+            data: await verifyOtp({ email, password, otp })
+        })
+    } catch (error) {
+        next(error)
+    }
 })
 
 module.exports = router

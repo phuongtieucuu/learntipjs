@@ -71,5 +71,23 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/search-comment?blogId=1&page=2
+GET http://localhost:3000/search-comment?blogId=1&page=3
 Content-Type: application/json
+
+###
+POST http://localhost:3000/user/register-otp
+Content-Type: application/json
+
+{
+    "email": "huy004@gmail.com"
+}
+
+###
+POST http://localhost:3000/user/verify-otp
+Content-Type: application/json
+
+{
+    "email": "huy004@gmail.com",
+    "password": "123456",
+    "otp": "727411"
+}
