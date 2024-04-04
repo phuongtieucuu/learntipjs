@@ -1,11 +1,13 @@
 const express = require("express");
 const app = express();
 const createError = require("http-errors");
+const cors = require('cors');
 
 require("dotenv").config();
 // require("./Helpers/connect.mongodb")
-require("./Helpers/connect.redis")
+require("./src/Helpers/connect.redis")
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res, next) => {
@@ -15,7 +17,7 @@ app.get("/", (req, res, next) => {
   });
 });
 
-app.use(require("./routers"));
+app.use(require("./src/routers"));
 
 
 app.use((req, res, next) => {

@@ -1,9 +1,7 @@
 const express = require("express");
-const userModal = require("../Models/user.modal");
 const createHttpError = require("http-errors");
 const { userValidate } = require("../Helpers/validation");
-const { signAccessToken, verifyAccessToken, signRefreshToken, verifyRefreshToken } = require("../Helpers/jwt.service");
-const client = require("../Helpers/connect.redis");
+const {  verifyAccessToken } = require("../Helpers/jwt.service");
 const { resgister, login, logout, registerOtp, verifyOtp } = require("../services/user.service");
 const router = express.Router();
 

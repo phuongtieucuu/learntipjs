@@ -1,0 +1,30 @@
+###
+POST http://localhost:3000/add-product
+Content-Type: application/json
+
+{
+    "productId": 1001,
+    "code": "PRO-01",
+    "name": "Quan ao TQ",
+    "branch": "TQ",
+    "description": "quan ao cua TQ day"
+}
+
+###
+POST http://localhost:3000/add-inventory
+Content-Type: application/json
+
+{
+    "productId": 1001,
+    "quatity": 1000
+}
+
+###
+POST http://localhost:3000/add-cart
+Content-Type: application/json
+
+{
+    "userId": 1234,
+    "productId": 1001,
+    "quatity": 2
+}

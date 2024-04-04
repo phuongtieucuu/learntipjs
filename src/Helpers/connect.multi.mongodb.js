@@ -3,6 +3,8 @@ require("dotenv").config();
 
 function mongodbConnection(uri) {
   const conn = mongoose.createConnection(uri);
+  mongoose.set("debug", true);
+  mongoose.set("debug", { color: true });
   conn.on("connected", function () {
     console.log(`MongoDB conencted::: ${this.name}`);
   });

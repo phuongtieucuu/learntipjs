@@ -1,10 +1,10 @@
 const createHttpError = require("http-errors");
-const userModal = require("../Models/user.modal");
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require("../Helpers/jwt.service");
 const client = require("../Helpers/connect.redis");
 const otpGenerator = require('otp-generator');
-const otpModal = require("../Models/otp.modal");
 const { createOtp, isvalidOtp } = require("./otp.service");
+const userModal = require("../Models/user.modal");
+const otpModal = require("../Models/otp.modal");
 
 module.exports = {
     resgister: async ({ email, password }) => {
